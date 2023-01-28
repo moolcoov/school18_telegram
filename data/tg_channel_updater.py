@@ -9,13 +9,12 @@ class TelegramBot:
     def send_post(self, post):
         attachments = []
 
-        text = post['items'][0]['text']
-        media = post['items'][0]['attachments']
+        text = post['text']
+        media = post['attachments']
 
         for i, el in enumerate(media):
             if el['type'] == 'photo':
-                print(el['image'][-1]['url'])
-                photo = telebot.types.InputMediaPhoto(el['image'][-1]['url'])
+                photo = telebot.types.InputMediaPhoto(el['photo']['sizes'][-1]['url'])
                 if i == 0:
                     photo.caption = text
                 attachments.append(photo)
