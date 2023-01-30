@@ -12,10 +12,17 @@ class TelegramBot:
         text = post['text']
         media = post['attachments']
 
-        for i, el in enumerate(media):
-            if el['type'] == 'photo':
-                photo = telebot.types.InputMediaPhoto(el['photo']['sizes'][-1]['url'])
-                if i == 0:
+        for index, attachment in enumerate(media):
+            if attachment['type'] == 'photo':
+                photos = attachment['photo']
+                sizes = dict()
+
+                for photo_size in photos['sizes']:
+                    sizes[int(photo_size['height'])] = photo_size['url']
+
+                photo = telebot.types.InputMediaPhoto(sizes[max(sizes)])
+
+                if index == 0:
                     photo.caption = text
                 attachments.append(photo)
 
