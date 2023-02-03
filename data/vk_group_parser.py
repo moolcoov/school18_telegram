@@ -10,7 +10,7 @@ class VkGroupParser:
 
     def get_last_post(self):
         try:
-            post = self.vk_api.wall.get(owner_id=const.GROUP_ID, count=1, v=const.V)['items'][0]
+            post = self.vk_api.wall.get(owner_id=const.GROUP_ID, count=2, v=const.V)['items'][0]
             post_id = post['id']
         except Exception as e:
             print(e)
