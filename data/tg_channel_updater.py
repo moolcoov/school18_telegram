@@ -11,7 +11,7 @@ class TelegramBot:
         polls = []
 
         text = post['text']
-        attachments = post['media']
+        attachments = post['attachments']
 
         for index, attachment in enumerate(attachments):
             if attachment['type'] == 'photo':
@@ -31,7 +31,6 @@ class TelegramBot:
         if media:
             if len(media) == 1:
                 text = f"[⁠]({media[0].url})" + text.strip()
-                print(text)
                 self.bot.send_message(const.CHANNEL_ID, text)
             else:
                 self.bot.send_media_group(const.CHANNEL_ID, media)
