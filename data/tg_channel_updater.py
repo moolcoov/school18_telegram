@@ -4,15 +4,16 @@ from data import constants as const
 
 class TelegramBot:
     def __init__(self):
-        self.bot = telebot.TeleBot(const.BOT_TOKEN)
+        self.bot = telebot.TeleBot(const.BOT_TOKEN, parse_mode="Markdown")
 
     def send_post(self, post):
-        attachments = []
+        media = []
+        polls = []
 
         text = post['text']
-        media = post['attachments']
+        attachments = post['media']
 
-        for index, attachment in enumerate(media):
+        for index, attachment in enumerate(attachments):
             if attachment['type'] == 'photo':
                 photos = attachment['photo']
                 sizes = dict()
@@ -21,12 +22,18 @@ class TelegramBot:
                     sizes[int(photo_size['height'])] = photo_size['url']
 
                 photo = telebot.types.InputMediaPhoto(sizes[max(sizes)])
+                photo.url = sizes[max(sizes)]
 
                 if index == 0:
                     photo.caption = text
-                attachments.append(photo)
+                media.append(photo)
 
-        if attachments:
-            self.bot.send_media_group(const.CHANNEL_ID, attachments)
+        if media:
+            if len(media) == 1:
+                text = f"[⁠]({media[0].url})" + text.strip()
+                print(text)
+                self.bot.send_message(const.CHANNEL_ID, text)
+            else:
+                self.bot.send_media_group(const.CHANNEL_ID, media)
         else:
             self.bot.send_message(const.CHANNEL_ID, text)
